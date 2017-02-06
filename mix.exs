@@ -12,13 +12,14 @@ defmodule WhereAmI.Mixfile do
   end
 
   def application do
-    [application: [:httpoison, :ip2location], extra_applications: [:logger]]
+    [application: [:httpoison, :ip2location, :poison], extra_applications: [:logger]]
   end
 
   defp deps do
     [
       {:httpoison, "~> 0.10.0"},
       {:ip2location, github: "nazipov/ip2location-elixir"},
+      {:poison, "~> 3.0"}
     ]
   end
 end

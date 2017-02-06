@@ -17,8 +17,13 @@ defmodule WhereAmI do
     end
 
     location = IP2Location.lookup(ip_addr)
-    post_body = Map.take(location, [:county_long, :city, :region, :latitude, :longitude, :ip])
+    ip = location |> Map.get(:ip) |> Tuple.to_list() |> Enum.join(".")
+    post_params = Map.take(location, [:county_long, :city, :region, :latitude, :longitude])
+                  |> Map.put(:timestamp, :os.system_time(:second))
+                  |> Map.put(:ip, ip)
+    post_body = Poison.Encoder.encode(post_params, [])
 
-    HTTPoison.post "https://whereami.mattgowie.com", post_body, [{"Content-Type", "application/json"}]
+    HTTPoison.post "https://whereami.mattgowie.com/location", post_body, [{"Content-Type", "application/json"}]
+    IO.puts "Successfully POST'd to Location Endpoint. Params: #{post_body}"
   end
 end
