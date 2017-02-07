@@ -28,9 +28,12 @@ defmodule WhereAmI do
                   |> Map.put(:ip, ip)
     post_body = Poison.Encoder.encode(post_params, [])
 
-    log "Uploading location information to whereami endpoint... \n Params: #{post_body}"
+    host = Application.get_env(:where_am_i, :where_am_i_com_host)
 
-    HTTPoison.post "https://whereami.mattgowie.com/location", post_body, [{"Content-Type", "application/json"}]
+    log "Uploading location information to whereami endpoint: #{host}"
+    log "POST Params: #{post_body}"
+
+    HTTPoison.post "#{host}/location", post_body, [{"Content-Type", "application/json"}]
 
     log "Successfully completed!"
   end
