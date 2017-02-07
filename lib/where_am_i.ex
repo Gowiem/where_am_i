@@ -22,7 +22,8 @@ defmodule WhereAmI do
 
     location = IP2Location.lookup(ip_addr)
     ip = location |> Map.get(:ip) |> Tuple.to_list() |> Enum.join(".")
-    post_params = Map.take(location, [:county_long, :city, :region, :latitude, :longitude])
+    post_params = location
+                  |> Map.take([:country_long, :country, :city, :region, :latitude, :longitude])
                   |> Map.put(:timestamp, :os.system_time(:second))
                   |> Map.put(:ip, ip)
     post_body = Poison.Encoder.encode(post_params, [])
